@@ -7,17 +7,7 @@
     <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
-    <style>
-        table {
-            border-collapse: collapse;
-        }
-        
-        table,
-        td,
-        th {
-            border: 1px solid gray;
-        }
-    </style>
+    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <script>
@@ -26,35 +16,35 @@
         var time = stamp.toLocaleTimeString();
         var dayTime = stamp.getHours() > 12 ? 'PM' : 'AM';
         var start = new Date(stamp.getFullYear(), stamp.getMonth(), 1);
-		var weekday = new Array(7);
-weekday[0] =  "Sunday";
-weekday[1] = "Monday";
-weekday[2] = "Tuesday";
-weekday[3] = "Wednesday";
-weekday[4] = "Thursday";
-weekday[5] = "Friday";
-weekday[6] = "Saturday";
+        var weekday = new Array(7);
+        weekday[0] = "Sunday";
+        weekday[1] = "Monday";
+        weekday[2] = "Tuesday";
+        weekday[3] = "Wednesday";
+        weekday[4] = "Thursday";
+        weekday[5] = "Friday";
+        weekday[6] = "Saturday";
 
         function refreshStamp() {
             stamp = new Date();
             date = stamp.toLocaleDateString();
             time = stamp.toLocaleTimeString();
             dayTime = stamp.getHours() > 12 ? 'PM' : 'AM';
-            document.getElementById('time').innerHTML = checkTime(stamp.getHours()) +":"+checkTime(stamp.getMinutes());
+            document.getElementById('time').innerHTML = checkTime(stamp.getHours()) + ":" + checkTime(stamp.getMinutes());
             document.getElementById('dayTime').innerHTML = dayTime;
             document.getElementById('day').innerHTML = weekday[stamp.getDay()];
             document.getElementById('mili').innerHTML = checkTime(stamp.getSeconds());
             document.getElementById('date').innerHTML = date;
-			
+
         }
-		
-		setInterval(function() {
-			refreshStamp();
-		}, 1000);
-		
-		function checkTime(t){
-			return t < 10 ? "0"+ t : t;
-		}
+
+        setInterval(function() {
+            refreshStamp();
+        }, 1000);
+
+        function checkTime(t) {
+            return t < 10 ? "0" + t : t;
+        }
 
         function setCookie(cname, cvalue) {
             window.localStorage.setItem(cname, cvalue);
@@ -85,7 +75,7 @@ weekday[6] = "Saturday";
         }
 
         $(document).ready(function() {
-			
+
             var tempDate = start;
             while (tempDate.getTime() < stamp.getTime()) {
                 if (tempDate.getDay() == 6 || tempDate.getDay() == 0) {
@@ -140,49 +130,52 @@ weekday[6] = "Saturday";
 </head>
 
 <body class="bg-dark">
-  
+
     <div class="container-fluid">
-	
+
         <div class="row">
-		<div class="col">
-               
-               
-		<table id="t1" class="table table-borderless table-sm text-danger"  >
-                    <tr>
-                        <td rowspan="2" ><h1 style="text-align:right" id="time" class="display-1 font-weight-bold">00:00</h1></td>
-                        <td><h1 id="dayTime"  class="display-4 font-weight-bold">PM</h1></td>
-                    </tr>
-                    <tr>
-                        <td><h1 id="mili" class="display-3 font-weight-bold">00</h1></td>
-                    </tr>
-                    <tr> 
-						<td ><h1 id="day" style="text-align:right" class="display-4 font-weight-bold">PMMMMMM</h1></td>
-						<td colspan="1"><h1 id="date" class="display-4 font-weight-bold">PMMMMMMM</h1></td>
-					</tr>
-                </table>
-		
-		</div>
-		</div>
-		
-        <div class="row justify-content-md-center">
-		<div class="col-md-auto">
-		  <div class="btn-group" role="group" aria-label="Basic example">
-    <button id="in" class="btn btn-secondary"> Time In </button>
-    <button id="out" class="btn btn-secondary"> Time Out </button>
-    
-    <button id="changeIn" class="btn btn-secondary"> Change In</button>
-    <button id="changeOut" class="btn btn-secondary"> Change Out</button>
-	<div class="btn-group" role="group" aria-label="Basic example">
-	</div>
-		
-		</div>
-		</div>
-		</div>
-        <div class="row" style="margin-bottom:50px;">
             <div class="col">
+
+                <table id="t1" class="table table-borderless table-sm text-danger">
+                    <tr>
+                        <td rowspan="2">
+                            <h1 style="text-align:right" id="time" class="display-1 font-weight-bold">00:00</h1></td>
+                        <td class="align-bottom">
+                            <h1 id="dayTime" class="display-4 font-weight-bold"  >PM</h1></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h1 id="mili" class="display-3 font-weight-bold">00</h1></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h1 id="day" style="text-align:right" class="display-4 font-weight-bold">PMMMMMM</h1></td>
+                        <td colspan="1">
+                            <h1 id="date" class="display-4 font-weight-bold">PMMMMMMM</h1></td>
+                    </tr>
+                </table>
+
             </div>
+        </div>
+
+        <div class="row justify-content-md-center">
+            <div class="col-md-auto">
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <button id="in" class="btn btn-secondary"> Time In </button>
+                    <button id="out" class="btn btn-secondary"> Time Out </button>
+
+                    <button id="changeIn" class="btn btn-secondary"> Change In</button>
+                    <button id="changeOut" class="btn btn-secondary"> Change Out</button>
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-md-center" style="margin-bottom:50px;">
+           
             <div class="col-6">
-               
+
                 <div class="card">
                     <div class="card-body">
                         <table id="t2" class="table table-sm table-bordered">
@@ -200,8 +193,7 @@ weekday[6] = "Saturday";
                     </div>
                 </div>
             </div>
-            <div class="col">
-            </div>
+           
         </div>
 
 </body>
