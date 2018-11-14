@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Log Me</title>
+    <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        
+        table,
+        td,
+        th {
+            border: 1px solid gray;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script>
+        var stamp = new Date();
+        var date = stamp.toLocaleDateString();
+        var time = stamp.toLocaleTimeString();
+        var dayTime = stamp.getHours() > 12 ? 'PM' : 'AM';
+        var start = new Date(stamp.getFullYear(), stamp.getMonth(), 1);
+		var weekday = new Array(7);
+weekday[0] =  "Sunday";
+weekday[1] = "Monday";
+weekday[2] = "Tuesday";
+weekday[3] = "Wednesday";
+weekday[4] = "Thursday";
+weekday[5] = "Friday";
+weekday[6] = "Saturday";
+
+        function refreshStamp() {
+            stamp = new Date();
+            date = stamp.toLocaleDateString();
+            time = stamp.toLocaleTimeString();
+            dayTime = stamp.getHours() > 12 ? 'PM' : 'AM';
+            document.getElementById('time').innerHTML = checkTime(stamp.getHours()) +":"+checkTime(stamp.getMinutes());
+            document.getElementById('dayTime').innerHTML = dayTime;
+            document.getElementById('day').innerHTML = weekday[stamp.getDay()];
+            document.getElementById('mili').innerHTML = checkTime(stamp.getSeconds());
+            document.getElementById('date').innerHTML = date;
+			
+        }
+		
+		setInterval(function() {
+			refreshStamp();
+		}, 1000);
+		
+		function checkTime(t){
+			return t < 10 ? "0"+ t : t;
+		}
+
+        function setCookie(cname, cvalue) {
+            window.localStorage.setItem(cname, cvalue);
+        }
+
+        function getCookie(cname) {
+            return window.localStorage.getItem(cname);
+        }
+
+        function deleteCookie(cname) {
+            window.localStorage.removeItem(cname);
+        }
+
+        function setTimeIn() {
+            refreshStamp();
+            if (getCookie(date + '~IN') == null) {
+                setCookie(date + '~IN', time);
+                location.reload();
+            }
+        }
+
+        function setTimeOut() {
+            refreshStamp();
+            if (getCookie(date + '~OUT') == null) {
+                setCookie(date + '~OUT', time);
+                location.reload();
+            }
+        }
+
+        $(document).ready(function() {
+			
+            var tempDate = start;
+            while (tempDate.getTime() < stamp.getTime()) {
+                if (tempDate.getDay() == 6 || tempDate.getDay() == 0) {
+                    var markup = "<tr><td colspan='3'></td></tr>";
+                    $("#t2 tbody").append(markup);
+                } else {
+                    var tmpd = tempDate.toLocaleDateString();
+                    var tmpin = getCookie(tmpd + '~IN') == null ? 'None' : getCookie(tmpd + '~IN');
+                    var tmpout = getCookie(tmpd + '~OUT') == null ? 'None' : getCookie(tmpd + '~OUT');
+                    var markup = "<tr><td>" + tmpd + "</td><td>" + tmpin + "</td><td>" + tmpout + "</td></tr>";
+                    $("#t2 tbody").append(markup);
+                }
+                tempDate.setDate(tempDate.getDate() + 1);
+            }
+            setTimeIn();
+            $("#in").click(function() {
+                setTimeIn();
+            });
+            $("#out").click(function() {
+                setCookie(date + '~OUT', time);
+                location.reload();
+            });
+            $("#changeIn").click(function() {
+                var val = prompt("Format mm/dd/yyyy HH:mm (use 24 hr format) :", date + " 01:00");
+                var newVal = new Date(val);
+                setCookie(newVal.toLocaleDateString() + '~IN', newVal.toLocaleTimeString());
+                location.reload();
+            });
+            $("#changeOut").click(function() {
+                var val = prompt("Format mm/dd/yyyy HH:mm (use 24 hr format) :", date + " 01:00");
+                var newVal = new Date(val);
+                setCookie(newVal.toLocaleDateString() + '~OUT', newVal.toLocaleTimeString());
+                location.reload();
+            });
+            $(window).focus(function() {
+                refreshStamp();
+            });
+            $(window).on('unload', function() {
+                getCookie("IsRefresh");
+                if (getCookie("IsRefresh") != null && getCookie("IsRefresh") != "") {
+
+                    deleteCookie("IsRefresh");
+                } else {
+                    setCookie("IsRefresh", "true");
+                    setCookie(date + '~OUT', time);
+                }
+            });
+
+        });
+        setTimeout(refreshStamp, 500);
+    </script>
+</head>
+
+<body class="bg-dark">
+  
+    <div class="container-fluid">
+	
+        <div class="row">
+		<div class="col">
+               
+               
+		<table id="t1" class="table table-borderless table-sm text-danger"  >
+                    <tr>
+                        <td rowspan="2" ><h1 style="text-align:right" id="time" class="display-1 font-weight-bold">00:00</h1></td>
+                        <td><h1 id="dayTime"  class="display-4 font-weight-bold">PM</h1></td>
+                    </tr>
+                    <tr>
+                        <td><h1 id="mili" class="display-3 font-weight-bold">00</h1></td>
+                    </tr>
+                    <tr> 
+						<td ><h1 id="day" style="text-align:right" class="display-4 font-weight-bold">PMMMMMM</h1></td>
+						<td colspan="1"><h1 id="date" class="display-4 font-weight-bold">PMMMMMMM</h1></td>
+					</tr>
+                </table>
+		
+		</div>
+		</div>
+		
+        <div class="row justify-content-md-center">
+		<div class="col-md-auto">
+		  <div class="btn-group" role="group" aria-label="Basic example">
+    <button id="in" class="btn btn-secondary"> Time In </button>
+    <button id="out" class="btn btn-secondary"> Time Out </button>
+    
+    <button id="changeIn" class="btn btn-secondary"> Change In</button>
+    <button id="changeOut" class="btn btn-secondary"> Change Out</button>
+	<div class="btn-group" role="group" aria-label="Basic example">
+	</div>
+		
+		</div>
+		</div>
+		</div>
+        <div class="row" style="margin-bottom:50px;">
+            <div class="col">
+            </div>
+            <div class="col-6">
+               
+                <div class="card">
+                    <div class="card-body">
+                        <table id="t2" class="table table-sm table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Time in</th>
+                                    <th>Time out</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+            </div>
+        </div>
+
+</body>
+
+</html>
