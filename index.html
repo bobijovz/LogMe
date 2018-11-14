@@ -30,7 +30,7 @@
             date = stamp.toLocaleDateString();
             time = stamp.toLocaleTimeString();
             dayTime = stamp.getHours() > 12 ? 'PM' : 'AM';
-            document.getElementById('time').innerHTML = checkTime(stamp.getHours()) + ":" + checkTime(stamp.getMinutes());
+            document.getElementById('time').innerHTML = checkTime(stamp.getHours() > 12 ? stamp.getHours() - 12 : stamp.getHours()) + ":" + checkTime(stamp.getMinutes());
             document.getElementById('dayTime').innerHTML = dayTime;
             document.getElementById('day').innerHTML = weekday[stamp.getDay()];
             document.getElementById('mili').innerHTML = checkTime(stamp.getSeconds());
@@ -133,8 +133,8 @@
 
     <div class="container-fluid">
 
-        <div class="row">
-            <div class="col">
+        <div class="row justify-content-md-center">
+            <div class="col-md-auto">
 
                 <table id="t1" class="table table-borderless table-sm text-danger">
                     <tr>
@@ -148,10 +148,10 @@
                             <h1 id="mili" class="display-3 font-weight-bold">00</h1></td>
                     </tr>
                     <tr>
-                        <td>
-                            <h1 id="day" style="text-align:right" class="display-4 font-weight-bold">PMMMMMM</h1></td>
-                        <td colspan="1">
-                            <h1 id="date" class="display-4 font-weight-bold">PMMMMMMM</h1></td>
+                        <td colspan="2">
+						    <h1 style="text-align:center" class="display-4 font-weight-bold">
+							<b id="day">PMMMMMM</b> | <b id="date">PMMMMMMM</b>
+							</h1></td>
                     </tr>
                 </table>
 
