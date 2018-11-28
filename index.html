@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+	<script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
 
     <script>
         var stamp = new Date();
@@ -75,6 +78,11 @@
         }
 
         $(document).ready(function() {
+			if(getCookie("first_visits2") == null){
+				setCookie("first_visit", "visited");
+			} else {
+				$(".alert").alert('close');
+			}
 
             var tempDate = start;
             while (tempDate.getTime() < stamp.getTime()) {
@@ -129,6 +137,21 @@
     <div class="container-fluid">
 
         <div class="row justify-content-md-center">
+            <div id="myInfo" class="col-md-auto">
+				<div class="alert alert-info alert-dismissible fade show" role="alert">
+					<p>This is web-page will automatically logged your time-in on first visit in a day <br /> and logged you out when you closed the browser or the page.<br /><br />
+					Tip: You can manually change your logs using the edit buttons below the clock.
+					</p>
+					
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+			</div>
+		</div>
+			
+			
+			<div class="row justify-content-md-center">
             <div class="col-md-auto">
 
                 <table id="t1" class="table table-borderless table-sm text-danger">
