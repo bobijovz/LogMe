@@ -78,13 +78,18 @@
 
             var tempDate = start;
             while (tempDate.getTime() < stamp.getTime()) {
+				var tmpd = tempDate.toLocaleDateString();
+                var tmpin = getCookie(tmpd + '~IN') == null ? 'None' : getCookie(tmpd + '~IN');
+                var tmpout = getCookie(tmpd + '~OUT') == null ? 'None' : getCookie(tmpd + '~OUT');
                 if (tempDate.getDay() == 6 || tempDate.getDay() == 0) {
-                    var markup = "<tr><td colspan='3'></td></tr>";
-                    $("#t2 tbody").append(markup);
+					if (getCookie(tmpd + '~IN') != null){
+						var markup = "<tr class='text-danger'><td >" + tmpd + "</td><td>" + tmpin + "</td><td>" + tmpout + "</td></tr>";
+						$("#t2 tbody").append(markup);
+					} else {
+						var markup = "<tr><td colspan='3'></td></tr>";
+						$("#t2 tbody").append(markup);
+					}
                 } else {
-                    var tmpd = tempDate.toLocaleDateString();
-                    var tmpin = getCookie(tmpd + '~IN') == null ? 'None' : getCookie(tmpd + '~IN');
-                    var tmpout = getCookie(tmpd + '~OUT') == null ? 'None' : getCookie(tmpd + '~OUT');
                     var markup = "<tr><td>" + tmpd + "</td><td>" + tmpin + "</td><td>" + tmpout + "</td></tr>";
                     $("#t2 tbody").append(markup);
                 }
@@ -110,22 +115,12 @@
                 setCookie(newVal.toLocaleDateString() + '~OUT', newVal.toLocaleTimeString());
                 location.reload();
             });
-            $(window).focus(function() {
-                refreshStamp();
-            });
-            $(window).on('unload', function() {
-                getCookie("IsRefresh");
-                if (getCookie("IsRefresh") != null && getCookie("IsRefresh") != "") {
-
-                    deleteCookie("IsRefresh");
-                } else {
-                    setCookie("IsRefresh", "true");
+           
+            $(window).on('beforeunload', function() {
                     setCookie(date + '~OUT', time);
-                }
             });
-
         });
-        setTimeout(refreshStamp, 500);
+       
     </script>
 </head>
 
