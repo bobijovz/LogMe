@@ -76,15 +76,9 @@
                 location.reload();
             }
         }
-
-        $(document).ready(function() {
-			if(getCookie("first_visits") == null){
-				setCookie("first_visit", "visited");
-			} else {
-				$(".alert").alert('close');
-			}
-
-            var tempDate = start;
+		
+		function generateLogs(x){
+			var tempDate = x != null ? x : start;
             while (tempDate.getTime() < stamp.getTime()) {
 				var tmpd = tempDate.toLocaleDateString();
                 var tmpin = getCookie(tmpd + '~IN') == null ? 'None' : getCookie(tmpd + '~IN');
@@ -103,6 +97,28 @@
                 }
                 tempDate.setDate(tempDate.getDate() + 1);
             }
+		}
+		
+		window.onbeforeunload = function (event) {
+			//var message = 'Important: Please click on \'Save\' button to leave this page.';
+			if (typeof event == 'undefined') {
+				event = window.event;
+			}
+			if (event) {
+				setCookie(date + '~OUT', time);
+				//event.returnValue = message;
+			}
+			//return message;
+		};
+
+        $(document).ready(function() {
+			/*if(getCookie("first_visits") == null){
+				setCookie("first_visit", "visited");
+			} else {
+				$(".alert").alert('close');
+			}*/
+
+            generateLogs();
             setTimeIn();
             $("#in").click(function() {
                 setTimeIn();
@@ -123,10 +139,15 @@
                 setCookie(newVal.toLocaleDateString() + '~OUT', newVal.toLocaleTimeString());
                 location.reload();
             });
+			$("#back").click(function() {
+				var t = start;
+				t.setMonth(start.getMonth() - 1);
+				generateLogs(t);
+			});
            
-            $(window).on('beforeunload', function() {
+            /*$(window).on('beforeunload', function() {
                     setCookie(date + '~OUT', time);
-            });
+            });*/
         });
        
     </script>
@@ -136,7 +157,7 @@
 
     <div class="container-fluid">
 
-        <div class="row justify-content-md-center">
+        <!--<div class="row justify-content-md-center">
             <div id="myInfo" class="col-md-auto">
 				<div class="alert alert-info alert-dismissible fade show" role="alert">
 					<p>This is web-page will automatically logged your time-in on first visit in a day <br /> and logged you out when you closed the browser or the page.<br /><br />
@@ -148,7 +169,7 @@
 					</button>
 				</div>
 			</div>
-		</div>
+		</div>-->
 			
 			
 			<div class="row justify-content-md-center">
@@ -179,6 +200,7 @@
         <div class="row justify-content-md-center">
             <div class="col-md-auto">
                 <div class="btn-group" role="group" aria-label="Basic example">
+					<button id="back" class="btn btn-secondary"> Back </button>
                     <button id="in" class="btn btn-secondary"> Time In </button>
                     <button id="out" class="btn btn-secondary"> Time Out </button>
 
